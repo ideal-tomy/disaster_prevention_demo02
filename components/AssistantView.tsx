@@ -27,7 +27,6 @@ export function AssistantView({ showQ1 }: { showQ1: boolean }) {
     <section>
       <div className="pageHead">
         <h2>AIアシスタント</h2>
-        <p>開館できる場所を、記録の数で返す</p>
       </div>
       <div className="chat">
         {messages.map((msg, index) => (
@@ -63,7 +62,6 @@ export function AssistantView({ showQ1 }: { showQ1: boolean }) {
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
             aria-label="質問"
-            placeholder="記録にあることだけ返します"
           />
           <button type="submit" className="btn btnPrimary">
             送る

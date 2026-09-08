@@ -29,7 +29,7 @@ export function ReviewProvider({ children }: { children: React.ReactNode }) {
   };
 
   const pendingCount = Object.values(decisions).filter((v) => v === "pending").length;
-  const confirmer = decisions.van && decisions.van !== "pending" ? "岡田（現場）" : "未確定。岡田が押すまで空欄";
+  const confirmer = decisions.van && decisions.van !== "pending" ? "岡田（現場）" : "未確定";
 
   const order = useMemo(() => {
     const byId = Object.fromEntries(REVIEW_ITEMS.map((item) => [item.id, item]));

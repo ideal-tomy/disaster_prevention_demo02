@@ -316,9 +316,17 @@ button { cursor: pointer; }
   border-radius: 12px;
   padding: 16px 18px;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 96px 1fr auto;
   gap: 12px;
   align-items: center;
+}
+
+.bannerStill {
+  width: 96px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
 }
 
 .kicker { font-size: 12px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
@@ -331,6 +339,18 @@ button { cursor: pointer; }
 .mapCard { min-height: 320px; }
 .mapSvg { width: 100%; height: 280px; display: block; }
 .mapLegend { display: flex; flex-wrap: wrap; gap: 10px 14px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+.mapLegend span { display: inline-flex; align-items: center; gap: 6px; }
+.legDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  display: inline-block;
+}
+.legDash {
+  background: transparent;
+  border: 1.5px dashed #8b93a0;
+  box-sizing: border-box;
+}
 .pinBtn { background: none; border: 0; padding: 0; }
 
 /* pills */
@@ -410,6 +430,10 @@ table.fac tbody tr:hover { background: #fafbfc; }
 .fadeCell {
   transition: opacity 200ms var(--ease);
 }
+.dueCell {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
 
 .mark {
   width: 8px;
@@ -417,6 +441,7 @@ table.fac tbody tr:hover { background: #fafbfc; }
   border-radius: 99px;
   display: inline-block;
   margin-right: 8px;
+  transition: background 150ms var(--ease);
 }
 .markDashed {
   background: transparent;
@@ -465,9 +490,10 @@ table.fac tbody tr:hover { background: #fafbfc; }
   position: relative;
   background:
     linear-gradient(180deg, #eef1f4, #e4e8ee);
-  border-radius: 10px;
+  border-radius: 4px;
   overflow: hidden;
   aspect-ratio: 16 / 9;
+  box-shadow: inset 0 0 0 1px var(--line);
 }
 
 .still.portrait { aspect-ratio: 4 / 5; }
@@ -513,6 +539,74 @@ table.fac tbody tr:hover { background: #fafbfc; }
 .camLine { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
 
 .sideStack { display: flex; flex-direction: column; gap: 16px; }
+
+.lpCopy {
+  padding: 28px 40px 40px;
+}
+
+.lpCopy h1 {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  max-width: 16em;
+}
+
+.lpPlace {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.lpWide {
+  width: 100%;
+  max-height: 52vh;
+  overflow: hidden;
+  background: #d9dee6;
+}
+
+.lpWide img {
+  width: 100%;
+  height: 52vh;
+  object-fit: cover;
+  display: block;
+}
+
+.mapLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.mapSvg { width: 100%; height: 360px; display: block; }
+
+.groupRow td {
+  cursor: default;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  background: var(--nav);
+  height: 32px;
+  padding: 6px 12px;
+}
+
+table.fac tbody tr.groupRow:hover { background: var(--nav); }
+
+table.fac tbody tr.overdue {
+  box-shadow: inset 2px 0 0 var(--stop);
+}
+
+.paper {
+  background: #f7f4ee;
+  border-radius: 2px;
+}
+
+.corrSvg { width: 100%; height: 160px; display: block; }
+.corrCap { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+.conclusion { margin: 0 0 12px; }
+.tlNow .caption span { color: var(--ink); font-weight: 500; }
 
 .graph {
   position: relative;

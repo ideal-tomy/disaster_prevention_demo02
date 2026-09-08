@@ -28,18 +28,14 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
           </span>
           <div>
             <h1>総合体育館コンソール</h1>
-            <p>翠嶺市総合体育館・点検と開館判定</p>
+            <p>翠嶺市総合体育館</p>
           </div>
         </div>
         <div className="topRight">
-          <span className="live">
-            <span className="liveDot" />
-            LIVE
-          </span>
           <span className="clock">{DEMO_CLOCK}</span>
           <span className="dateLine">{DEMO_DATE}</span>
           <span className="dateLine">台風第14号接近</span>
-          <Link href="/console/incident" className="pill pillWarn" title="条件付きと、確認できていない場所が残っている">
+          <Link href="/console/incident" className="pill pillWarn">
             注意
           </Link>
           <Link href="/console/assistant" className="btn btnPrimary">
@@ -59,12 +55,6 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
               </Link>
             );
           })}
-          <div className="navFoot">
-            <strong>翠嶺市総合体育館</strong>
-            DEMO: モックデータ
-            <br />
-            指定管理の現場
-          </div>
         </nav>
         <main className="main">{children}</main>
       </div>

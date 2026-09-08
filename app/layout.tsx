@@ -11,7 +11,7 @@ const sans = Noto_Sans_JP({
 
 export const metadata: Metadata = {
   title: "総合体育館コンソール",
-  description: "翠嶺市総合体育館の点検記録と、今日開けるかを同じ一覧で見るデモです。"
+  description: "翠嶺市総合体育館"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

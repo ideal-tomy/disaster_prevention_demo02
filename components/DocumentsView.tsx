@@ -12,15 +12,11 @@ export function DocumentsView() {
     <section>
       <div className="pageHead">
         <h2>書類</h2>
-        <p>同じ記録から、開館前チェックと点検簿</p>
       </div>
-      <p className="hint" style={{ marginTop: 12 }}>
-        翠嶺市総合体育館
-      </p>
       <div className="docGrid">
-        <article className="card docSheet">
-          <h3>開館前チェック（下書き）</h3>
-          {OPENING_DOC.map((row) => (
+        <article className="card docSheet paper">
+          <h3>開館前チェック</h3>
+          {OPENING_DOC.filter((row) => row.key !== "note" && row.key !== "title").map((row) => (
             <div
               className={row.pair && pair === row.pair ? "docRow lit" : "docRow"}
               key={row.key}
@@ -32,9 +28,9 @@ export function DocumentsView() {
             </div>
           ))}
         </article>
-        <article className="card docSheet">
-          <h3>設備点検記録簿（抜粋）</h3>
-          {LEDGER_DOC.map((row) => (
+        <article className="card docSheet paper">
+          <h3>設備点検記録簿</h3>
+          {LEDGER_DOC.filter((row) => row.key !== "title").map((row) => (
             <div
               className={row.pair && pair === row.pair ? "docRow lit" : "docRow"}
               key={row.key}
@@ -50,8 +46,8 @@ export function DocumentsView() {
       <table className="mapTable">
         <thead>
           <tr>
-            <th>点検記録簿の行</th>
-            <th>開館前チェックの欄</th>
+            <th>点検記録簿</th>
+            <th>開館前チェック</th>
           </tr>
         </thead>
         <tbody>
@@ -68,11 +64,6 @@ export function DocumentsView() {
           ))}
         </tbody>
       </table>
-      <p>
-        <button type="button" className="btn btnGhost" disabled title="このデモでは出しません">
-          印刷
-        </button>
-      </p>
     </section>
   );
 }

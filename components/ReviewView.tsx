@@ -7,7 +7,7 @@ import type { ReviewDecision } from "@/data/suirei";
 function statusText(decision: ReviewDecision, decidedNote?: string) {
   if (decision === "needed") return decidedNote ?? "対応が必要（岡田）";
   if (decision === "ok") return "問題なし（岡田）";
-  return "確認してください";
+  return "未入力";
 }
 
 export function ReviewView() {
@@ -19,7 +19,6 @@ export function ReviewView() {
     <section>
       <div className="pageHead">
         <h2>画像確認</h2>
-        <p>候補を挙げ、現場が押す</p>
       </div>
       {toast ? <p className="toast">{toast}</p> : null}
       <div className="reviewStats">
@@ -43,7 +42,6 @@ export function ReviewView() {
                 <h3>
                   {item.place}　{item.spot}
                 </h3>
-                {item.label ? <p style={{ margin: "0 0 6px" }}>{item.label}</p> : null}
                 <p style={{ margin: 0 }}>{statusText(decision, item.decidedNote)}</p>
                 <p style={{ color: "var(--muted)", fontSize: 13 }}>ナレッジ {item.knowledge}</p>
                 {decision === "pending" ? (

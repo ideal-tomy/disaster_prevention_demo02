@@ -1,11 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { StatusPill } from "@/components/StatusPill";
 import { dueLabel, ZONES, type Zone } from "@/data/suirei";
 
 type View = "upkeep" | "open";
+
+const GROUP_AT: Record<string, string> = {
+  Z01: "競技場",
+  Z02: "動線",
+  Z05: "機械",
+  Z08: "躯体",
+  Z09: "館内",
+  Z12: "屋上・空調",
+  Z15: "備品・外構",
+  Z18: "動線"
+};
 
 function Mark({ zone, view }: { zone: Zone; view: View }) {
   const kind = view === "upkeep" ? zone.due : zone.judgment;
@@ -45,13 +56,12 @@ export function FacilitiesView({ view, zoneId }: { view: View; zoneId?: string }
     <section>
       <div className="pageHead">
         <h2>設備・場所</h2>
-        <p>保全は期限。開館は判定</p>
       </div>
       <div className="toolbar">
         <div
           className="seg"
           role="group"
-          aria-label="表示の切替"
+          aria-label="保全と開館"
           onKeyDown={(event) => {
             if (event.key === "ArrowRight") go("open");
             if (event.key === "ArrowLeft") go("upkeep");
@@ -64,7 +74,6 @@ export function FacilitiesView({ view, zoneId }: { view: View; zoneId?: string }
             開館
           </button>
         </div>
-        <span style={{ color: "var(--muted)", fontSize: 13 }}>並びは固定。動線が先</span>
       </div>
       <div className="tableWrap">
         <table className="fac">
@@ -74,36 +83,44 @@ export function FacilitiesView({ view, zoneId }: { view: View; zoneId?: string }
               <th>種別</th>
               <th>業者</th>
               {view === "upkeep" ? <th>期限</th> : <th>判定</th>}
-              {view === "open" ? <th>理由（平常時の記録）</th> : null}
+              {view === "open" ? <th>理由</th> : null}
             </tr>
           </thead>
           <tbody>
             {ZONES.map((zone) => (
-              <tr
-                key={zone.id}
-                className={open?.id === zone.id ? "current" : undefined}
-                onClick={() => {
-                  if (zone.click === "incident") router.push("/console/incident");
-                  else setOpen(zone);
-                }}
-              >
-                <td>
-                  <Mark zone={zone} view={view} />
-                  {zone.name}
-                </td>
-                <td className="fadeCell">{zone.kind}</td>
-                <td className="fadeCell">{zone.vendor}</td>
-                {view === "upkeep" ? (
-                  <td className="fadeCell num">{dueLabel(zone.due)}</td>
-                ) : (
-                  <>
-                    <td className="fadeCell">
-                      <StatusPill kind={zone.judgment} />
-                    </td>
-                    <td className="fadeCell">{zone.reason}</td>
-                  </>
-                )}
-              </tr>
+              <Fragment key={zone.id}>
+                {GROUP_AT[zone.id] ? (
+                  <tr className="groupRow">
+                    <td colSpan={view === "open" ? 5 : 4}>{GROUP_AT[zone.id]}</td>
+                  </tr>
+                ) : null}
+                <tr
+                  className={[open?.id === zone.id ? "current" : "", zone.due === "overdue" ? "overdue" : ""]
+                    .filter(Boolean)
+                    .join(" ")}
+                  onClick={() => {
+                    if (zone.click === "incident") router.push("/console/incident");
+                    else setOpen(zone);
+                  }}
+                >
+                  <td>
+                    <Mark zone={zone} view={view} />
+                    {zone.name}
+                  </td>
+                  <td className="fadeCell">{zone.kind}</td>
+                  <td className="fadeCell">{zone.vendor}</td>
+                  {view === "upkeep" ? (
+                    <td className="dueCell num">{dueLabel(zone.due)}</td>
+                  ) : (
+                    <>
+                      <td className="fadeCell">
+                        <StatusPill kind={zone.judgment} />
+                      </td>
+                      <td className="fadeCell">{zone.reason}</td>
+                    </>
+                  )}
+                </tr>
+              </Fragment>
             ))}
           </tbody>
         </table>

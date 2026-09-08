@@ -52,7 +52,7 @@ export function StillFrame({ src, fileName, ratio = "wide", cameraId, caption, n
           {note ? <span>{note}</span> : null}
         </figcaption>
       ) : null}
-      {cameraId ? <p className="camLine">{cameraId} · 抽出静止画</p> : null}
+      {cameraId ? <p className="camLine">{cameraId}</p> : null}
     </figure>
   );
 }
