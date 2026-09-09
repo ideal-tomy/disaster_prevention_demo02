@@ -5,7 +5,7 @@ import { DASHBOARD, INCIDENT } from "@/data/suirei";
 
 export default function DashboardPage() {
   return (
-    <section>
+    <section className="dash">
       <div className="pageHead">
         <h2>施設の状況</h2>
       </div>

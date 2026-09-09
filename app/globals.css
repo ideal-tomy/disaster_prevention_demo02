@@ -378,6 +378,8 @@ button { cursor: pointer; }
   align-items: center;
   justify-content: space-between;
   margin: 20px 0 12px;
+  position: relative;
+  z-index: 22;
 }
 
 .seg {
@@ -829,4 +831,185 @@ table.fac tbody tr.current {
 
 @media (prefers-reduced-motion: reduce) {
   .fadeCell, .btn, .seg button { transition: none; }
+}
+
+.phoneBar, .moreSheet, .moreBackdrop { display: none; }
+.moreLead { display: none; }
+
+.corrFold { margin: 0; }
+.corrFold summary {
+  cursor: pointer;
+  font-weight: 500;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.corrBody { margin-top: 8px; }
+
+@media (min-width: 1100px) {
+  .corrFold summary { display: none; }
+  .corrFold .corrBody { display: block !important; }
+}
+
+@media (max-width: 1099px) {
+  html, body { overflow-x: hidden; }
+  .appMin { min-width: 0; }
+  .deskOnly { display: none !important; }
+
+  .shell { min-height: 100dvh; }
+  .topbar { padding: 10px 16px; }
+  .topbar h1 { font-size: 15px; }
+  .topRight { gap: 8px; }
+  .clock { font-size: 18px; }
+
+  .bodyRow { display: block; }
+  .nav { display: none; }
+  .main { padding: 16px 16px calc(72px + env(safe-area-inset-bottom)); }
+
+  .phoneBar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .phoneBar a,
+  .phoneBar button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 56px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 12px;
+  }
+  .phoneBar a[aria-current="page"],
+  .phoneBar button[aria-current="page"] {
+    background: var(--nav);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .phoneBar .badge { font-size: 10px; min-width: 16px; }
+
+  .moreBackdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    border: 0;
+    background: rgba(28, 36, 48, 0.28);
+    z-index: 31;
+  }
+  .moreSheet {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 32;
+    background: var(--surface);
+    border-radius: 16px 16px 0 0;
+    padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+    box-shadow: 0 -12px 32px rgba(28, 36, 48, 0.08);
+  }
+  .moreLead { display: inline-flex; width: 100%; margin-bottom: 8px; }
+  .moreSheet a:not(.moreLead) {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 8px;
+    border-radius: 8px;
+  }
+  .moreSheet a[aria-current="page"] { background: var(--nav); }
+
+  .lp { overflow-x: hidden; }
+  .lpCopy { padding: 20px 16px 32px; }
+  .lpCopy h1 { font-size: clamp(26px, 7.2vw, 34px); }
+  .ctaRow { flex-direction: column; align-items: stretch; }
+  .ctaRow .btn { width: 100%; }
+  .lpWide { max-height: none; }
+  .lpWide img { height: 36vh; min-height: 180px; }
+
+  .dash { display: flex; flex-direction: column; }
+  .dash .pageHead { order: 0; }
+  .dash .incidentBanner { order: 1; margin-top: 16px; }
+  .dash .statGrid { order: 2; }
+  .dash .mapCard { order: 3; }
+
+  .incidentBanner { grid-template-columns: 1fr; align-items: start; }
+  .bannerStill { width: 100%; height: auto; aspect-ratio: 16 / 9; }
+  .incidentBanner .btn { width: 100%; }
+
+  .statGrid {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    margin-top: 12px;
+    padding-bottom: 4px;
+  }
+  .statGrid .card { flex: 0 0 132px; padding: 12px; }
+  .statGrid .card label { font-size: 11px; }
+  .statGrid .figure { font-size: 28px; }
+
+  .mapCard { min-height: 0; }
+  .mapSvg, .mapSvgCompact { height: 180px; }
+  .mapLink { flex-wrap: wrap; }
+  .mapLegend { flex-wrap: wrap; gap: 8px; }
+  .pageHead h2 { font-size: 20px; }
+
+  table.fac th:nth-child(2),
+  table.fac td:nth-child(2),
+  table.fac th:nth-child(3),
+  table.fac td:nth-child(3),
+  table.fac th:nth-child(5),
+  table.fac td:nth-child(5) { display: none; }
+  .tableWrap { overflow-x: hidden; }
+  table.fac { min-width: 0; }
+  table.fac th, table.fac td { padding: 12px 8px; }
+
+  .toolbar { z-index: 1; }
+  .drawerBackdrop { z-index: 24; }
+  .drawer {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: min(82dvh, 720px);
+    z-index: 25;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 32px rgba(28, 36, 48, 0.08);
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+  .kv { grid-template-columns: 88px minmax(0, 1fr); }
+
+  .incidentGrid { grid-template-columns: 1fr; }
+  .actions a { display: flex; align-items: center; min-height: 44px; }
+
+  .reviewCard { grid-template-columns: 1fr; }
+  .btnRow .btn { min-height: 44px; flex: 1; }
+
+  .docGrid { grid-template-columns: 1fr; }
+  .docRow { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .tableScroll { overflow-x: auto; }
+
+  .intRow { grid-template-columns: 1fr; gap: 4px; }
+  .chips { flex-direction: column; }
+  .chips .chip { width: 100%; justify-content: flex-start; min-height: 44px; }
+  .askRow { flex-direction: column; }
+  .askRow .btn { width: 100%; }
+
+  .bldgLine { display: block; }
+  .bldgLine div { flex-wrap: wrap; }
+  .eqItem { grid-template-columns: 72px 56px minmax(0, 1fr); }
 }

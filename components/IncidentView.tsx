@@ -8,8 +8,9 @@ import { StatusPill } from "@/components/StatusPill";
 import { StillFrame } from "@/components/StillFrame";
 import { INCIDENT } from "@/data/suirei";
 
-export function IncidentView() {
+export function IncidentView({ from }: { from?: string }) {
   const [activePin, setActivePin] = useState<string | null>(null);
+  const back = from === "assistant" ? { href: "/console/assistant", label: "AIアシスタント" } : null;
 
   return (
     <section>
@@ -66,21 +67,35 @@ export function IncidentView() {
           <article className="card">
             <GymMap activePin={activePin} compact />
           </article>
-          <article className="card">
-            <CorrelationGraph />
-            <CorrelationCaption />
-          </article>
+          <details className="card corrFold">
+            <summary>関連付け</summary>
+            <div className="corrBody">
+              <CorrelationGraph />
+              <CorrelationCaption />
+            </div>
+          </details>
           <article className="card">
             <p className="conclusion">{INCIDENT.conclusion}</p>
             <h3>確認・対応すること</h3>
             <ol className="actions">
               {INCIDENT.actions.map((action) => (
-                <li key={action}>{action}</li>
+                <li key={action.text}>
+                  <Link className="linkish" href={action.href}>
+                    {action.text}
+                  </Link>
+                </li>
               ))}
             </ol>
             <p>
               体育館全体：<StatusPill kind={INCIDENT.judgment} />
             </p>
+            {back ? (
+              <p>
+                <Link className="linkish" href={back.href}>
+                  {back.label}
+                </Link>
+              </p>
+            ) : null}
           </article>
         </div>
       </div>

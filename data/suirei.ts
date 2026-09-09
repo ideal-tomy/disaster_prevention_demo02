@@ -408,10 +408,22 @@ export const INCIDENT = {
     { id: "exit", pinId: "Z04", text: "2026/09/09に高木が非常口前の備品の画像を確認し、「対応が必要」と記録。参照：K-F4" }
   ],
   actions: [
-    "予約台帳の利用予定と、北側入口前の人数を確認する（予約台帳は未連携）",
-    "搬入予定を確認し、東側搬入口の車両を移動できるか確認する",
-    "非常口前の備品を、通行を妨げない場所に移動する（2026/09/09の指摘への対応は未完了）",
-    "発電機の点検報告書を確認する。サブアリーナ（Z16）を夜間に利用できるか、電源を含めて確認する"
+    {
+      text: "予約台帳の利用予定と、北側入口前の人数を確認する（予約台帳は未連携）",
+      href: "/console/integrations"
+    },
+    {
+      text: "搬入予定を確認し、東側搬入口の車両を移動できるか確認する",
+      href: "/console/review"
+    },
+    {
+      text: "非常口前の備品を、通行を妨げない場所に移動する（2026/09/09の指摘への対応は未完了）",
+      href: "/console/facilities?view=upkeep&zone=Z04&equip=K-F4&from=incident"
+    },
+    {
+      text: "発電機の点検報告書を確認する。サブアリーナ（Z16）を夜間に利用できるか、電源を含めて確認する",
+      href: "/console/facilities?view=upkeep&zone=Z05&equip=K-G3&from=incident"
+    }
   ]
 } as const;
 
@@ -472,7 +484,7 @@ export const QA = {
     {
       id: "q1",
       q: "開館前に、いま確認・対応することは何ですか",
-      href: "/console/incident",
+      href: "/console/incident?from=assistant",
       a: "開館前に、次の4項目を確認してください。\n\n1. 予約台帳の利用予定と、北側入口前の人数を確認する（予約台帳は未連携）\n2. 搬入予定を確認し、東側搬入口の車両を移動できるか確認する\n3. 非常口前の備品を、通行を妨げない場所に移動する（2026/09/09の指摘への対応は未完了）\n4. 発電機の点検報告書を確認する。サブアリーナ（Z16）を夜間に利用できるか、電源を含めて確認する\n\nアリーナ単体は記録上、利用可能です。体育館全体は条件の確認が必要です。開館の可否は担当者が判断します。"
     },
     {
@@ -484,7 +496,7 @@ export const QA = {
     {
       id: "q3",
       q: "屋上と空調設備が未確認なのはなぜですか",
-      href: "/console/facilities?view=open&zone=Z12",
+      href: "/console/facilities?view=open&zone=Z12&from=assistant",
       a: "屋上と空調設備は、利用可否を判断するための点検記録が登録されていません。\n\n台帳への登録だけでは、利用できるか判断できません。点検記録を確認できるまで、利用可否が未確認の項目として表示します。"
     }
   ]
@@ -863,6 +875,15 @@ export function recordEventsForZone(zone: Zone): FacilityEvent[] {
       by: zone.vendor
     }
   ];
+}
+
+export function eventActor(
+  event: FacilityEvent,
+  decisions?: Partial<Record<"van" | "gen", ReviewDecision>>
+) {
+  if (event.id === "d3-a" && decisions?.van && decisions.van !== "pending") return "岡田（指定管理者）";
+  if (event.id === "g3-photo" && decisions?.gen && decisions.gen !== "pending") return "岡田（指定管理者）";
+  return event.by;
 }
 
 export function equipmentForZone(zoneId: string) {

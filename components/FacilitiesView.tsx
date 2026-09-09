@@ -1,10 +1,11 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { StatusPill } from "@/components/StatusPill";
 import { EquipmentTimeline } from "@/components/EquipmentTimeline";
+import { useReview } from "@/components/ReviewState";
 import {
   EMPTY_ZONE_NOTE,
   FACILITY,
@@ -18,6 +19,15 @@ import {
 } from "@/data/suirei";
 
 type View = "upkeep" | "open";
+
+function facilitiesHref(view: View, zone?: string, equip?: string, from?: string) {
+  const params = new URLSearchParams();
+  params.set("view", view === "open" ? "open" : "upkeep");
+  if (zone) params.set("zone", zone);
+  if (equip) params.set("equip", equip);
+  if (from) params.set("from", from);
+  return `/console/facilities?${params.toString()}`;
+}
 
 const GROUP_AT: Record<string, string> = {
   Z01: "競技場",
@@ -54,28 +64,42 @@ export function FacilitiesView({
   from?: string;
 }) {
   const router = useRouter();
+  const { decisions } = useReview();
   const [open, setOpen] = useState<Zone | null>(null);
 
   useEffect(() => {
-    if (!zoneId) return;
-    const zone = ZONES.find((item) => item.id === zoneId);
-    if (zone?.click === "drawer") setOpen(zone);
-    if (equipId) {
-      const equip = equipmentForZone(zoneId).find((row) => row.id === equipId) ?? equipmentForZone(zoneId)[0];
-      if (equip && zone?.click === "incident") setOpen(zone);
+    if (!zoneId) {
+      setOpen(null);
+      return;
     }
+    const zone = ZONES.find((item) => item.id === zoneId);
+    if (zone?.click === "drawer") {
+      setOpen(zone);
+      return;
+    }
+    if (equipId && zone?.click === "incident") {
+      const equip = equipmentForZone(zoneId).find((row) => row.id === equipId) ?? equipmentForZone(zoneId)[0];
+      setOpen(equip ? zone : null);
+      return;
+    }
+    setOpen(null);
   }, [zoneId, equipId]);
+
+  const close = useCallback(() => {
+    setOpen(null);
+    router.push(facilitiesHref(view));
+  }, [router, view]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(null);
+      if (event.key === "Escape") close();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [close]);
 
   const go = (next: View) => {
-    router.push(next === "upkeep" ? "/console/facilities?view=upkeep" : "/console/facilities?view=open");
+    router.push(facilitiesHref(next, open?.id ?? zoneId, equipId, from));
   };
 
   const back =
@@ -83,11 +107,11 @@ export function FacilitiesView({
       ? { href: "/console/incident", label: "要対応事項" }
       : from === "review"
         ? { href: "/console/review", label: "画像確認" }
-        :     from === "documents"
-      ? { href: "/console/documents", label: "点検・開館前の記録" }
-      : from === "assistant"
-        ? { href: "/console/assistant", label: "AIアシスタント" }
-        : null;
+        : from === "documents"
+          ? { href: "/console/documents", label: "点検・開館前の記録" }
+          : from === "assistant"
+            ? { href: "/console/assistant", label: "AIアシスタント" }
+            : null;
 
   return (
     <section>
@@ -161,7 +185,7 @@ export function FacilitiesView({
                   className={open?.id === zone.id ? "current" : undefined}
                   onClick={() => {
                     if (zone.click === "incident") router.push("/console/incident");
-                    else setOpen(zone);
+                    else router.push(facilitiesHref(view, zone.id, undefined, from));
                   }}
                 >
                   <td>
@@ -196,9 +220,9 @@ export function FacilitiesView({
       </div>
       {open ? (
         <>
-          <button type="button" className="drawerBackdrop" aria-label="閉じる" onClick={() => setOpen(null)} />
+          <button type="button" className="drawerBackdrop" aria-label="閉じる" onClick={close} />
           <aside className="drawer" role="dialog" aria-label={open.name}>
-            <button type="button" className="btn btnGhost" onClick={() => setOpen(null)}>
+            <button type="button" className="btn btnGhost" onClick={close}>
               閉じる
             </button>
             <h3>{open.name}</h3>
@@ -216,7 +240,13 @@ export function FacilitiesView({
               <span>記録日</span>
               <div className="num">{open.recordDate}</div>
               <span>記録の確認者</span>
-              <div>{open.confirmer}</div>
+              <div>
+                {open.id === "Z02"
+                  ? decisions.van !== "pending"
+                    ? "岡田（指定管理者）"
+                    : "—"
+                  : open.confirmer}
+              </div>
               <span>写真</span>
               <div>{open.photo}</div>
             </div>

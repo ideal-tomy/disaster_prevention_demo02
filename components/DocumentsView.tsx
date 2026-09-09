@@ -23,6 +23,7 @@ export function DocumentsView() {
               key={row.key}
               onMouseEnter={() => setPair(row.pair)}
               onMouseLeave={() => setPair("")}
+              onClick={() => setPair((current) => (row.pair && current === row.pair ? "" : row.pair))}
             >
               <span>{row.label}</span>
               <div>
@@ -60,6 +61,7 @@ export function DocumentsView() {
               key={row.key}
               onMouseEnter={() => setPair(row.pair)}
               onMouseLeave={() => setPair("")}
+              onClick={() => setPair((current) => (row.pair && current === row.pair ? "" : row.pair))}
             >
               <span>{row.label}</span>
               <div>{row.value}</div>
@@ -67,6 +69,7 @@ export function DocumentsView() {
           ))}
         </article>
       </div>
+      <div className="tableScroll">
       <table className="mapTable">
         <thead>
           <tr>
@@ -81,6 +84,7 @@ export function DocumentsView() {
               className={pair === row.id ? "lit" : undefined}
               onMouseEnter={() => setPair(row.id)}
               onMouseLeave={() => setPair("")}
+              onClick={() => setPair((current) => (current === row.id ? "" : row.id))}
             >
               <td>{row.left}</td>
               <td>{row.right}</td>
@@ -88,6 +92,7 @@ export function DocumentsView() {
           ))}
         </tbody>
       </table>
+      </div>
     </section>
   );
 }
