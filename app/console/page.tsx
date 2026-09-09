@@ -8,7 +8,6 @@ export default function DashboardPage() {
     <section>
       <div className="pageHead">
         <h2>施設の状況</h2>
-        <p>場所・設備18件の利用判定（記録に基づく）</p>
       </div>
       <div className="statGrid">
         <article className="card">
@@ -35,7 +34,9 @@ export default function DashboardPage() {
           <div className="kicker">
             <span className="num">{INCIDENT.id}</span>
             <StatusPill kind={INCIDENT.judgment} />
-            <span className="pill pillAi">関連付け {INCIDENT.confidence}%（デモ値）</span>
+            <span className="pill pillAi" title={INCIDENT.confidenceNote}>
+              関連付け {INCIDENT.confidence}%
+            </span>
           </div>
           <h3>{INCIDENT.headline}</h3>
           <p className="meta">車両の撮影 14:08 · 備品の撮影 14:36 · 発電機の点検期限 2026/08/28</p>

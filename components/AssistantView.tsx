@@ -27,7 +27,6 @@ export function AssistantView({ showQ1 }: { showQ1: boolean }) {
     <section>
       <div className="pageHead">
         <h2>AIアシスタント</h2>
-        <p>このデモでは、3つの質問への回答例を表示します。</p>
       </div>
       <div className="chat">
         {messages.map((msg, index) => (

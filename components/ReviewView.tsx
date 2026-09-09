@@ -20,7 +20,6 @@ export function ReviewView() {
     <section>
       <div className="pageHead">
         <h2>画像確認</h2>
-        <p>画像を確認し、対応が必要かどうかを選択してください。</p>
       </div>
       {toast ? <p className="toast" role="status">{toast}</p> : null}
       <div className="reviewStats">

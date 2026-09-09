@@ -12,6 +12,7 @@ import {
   equipmentForZone,
   eventsFor,
   knowledgeLabel,
+  recordEventsForZone,
   ZONES,
   type Zone
 } from "@/data/suirei";
@@ -82,9 +83,11 @@ export function FacilitiesView({
       ? { href: "/console/incident", label: "要対応事項" }
       : from === "review"
         ? { href: "/console/review", label: "画像確認" }
-        : from === "documents"
-          ? { href: "/console/documents", label: "点検・開館前の記録" }
-          : null;
+        :     from === "documents"
+      ? { href: "/console/documents", label: "点検・開館前の記録" }
+      : from === "assistant"
+        ? { href: "/console/assistant", label: "AIアシスタント" }
+        : null;
 
   return (
     <section>
@@ -155,9 +158,7 @@ export function FacilitiesView({
                   </tr>
                 ) : null}
                 <tr
-                  className={[open?.id === zone.id ? "current" : "", zone.due === "overdue" ? "overdue" : ""]
-                    .filter(Boolean)
-                    .join(" ")}
+                  className={open?.id === zone.id ? "current" : undefined}
                   onClick={() => {
                     if (zone.click === "incident") router.push("/console/incident");
                     else setOpen(zone);
@@ -170,7 +171,15 @@ export function FacilitiesView({
                   <td className="fadeCell">{zone.kind}</td>
                   <td className="fadeCell">{zone.vendor}</td>
                   {view === "upkeep" ? (
-                    <td className="dueCell num">{dueLabel(zone.due)}</td>
+                    <td
+                      className={[
+                        "dueCell",
+                        "num",
+                        zone.due === "overdue" ? "dueOverdue" : zone.due === "thisMonth" ? "dueMonth" : "dueQuiet"
+                      ].join(" ")}
+                    >
+                      {dueLabel(zone.due)}
+                    </td>
                   ) : (
                     <>
                       <td className="fadeCell">
@@ -220,8 +229,11 @@ export function FacilitiesView({
                 <EquipmentTimeline events={eventsFor(equip.id)} />
               </div>
             ))}
-            {equipmentForZone(open.id).length === 0 ? (
-              <p className="eqEmpty">{EMPTY_ZONE_NOTE[open.id] ?? "この場所の点検記録は登録されていません。"}</p>
+            {equipmentForZone(open.id).length === 0 && recordEventsForZone(open).length > 0 ? (
+              <EquipmentTimeline events={recordEventsForZone(open)} />
+            ) : null}
+            {equipmentForZone(open.id).length === 0 && recordEventsForZone(open).length === 0 && EMPTY_ZONE_NOTE[open.id] ? (
+              <p className="eqEmpty">{EMPTY_ZONE_NOTE[open.id]}</p>
             ) : null}
             {back ? (
               <p>

@@ -50,6 +50,13 @@ export function IncidentView() {
                       </Link>
                     </p>
                   ) : null}
+                  {row.id === "exit" ? (
+                    <p>
+                      <Link className="linkish" href="/console/facilities?view=upkeep&zone=Z04&equip=K-F4&from=incident">
+                        K-F4
+                      </Link>
+                    </p>
+                  ) : null}
                 </li>
               ))}
             </ul>

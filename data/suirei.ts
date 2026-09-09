@@ -467,25 +467,25 @@ export const REVIEW_ITEMS: ReviewItem[] = [
 ];
 
 export const QA = {
-  "fallback": "この質問には対応していません。下の3つの質問から選んでください。このデモでは、あらかじめ用意した回答を表示します。",
-  "chips": [
+  fallback: "この質問には対応していません。下の3つの質問から選んでください。",
+  chips: [
     {
-      "id": "q1",
-      "q": "今日、利用できる場所・設備はどれですか",
-      "href": "/console/facilities?view=open",
-      "a": "記録上、利用可能と判定された場所・設備は10件です。条件の確認が必要な4件、利用不可の2件、利用可否が未確認の2件は含みません。\n\n利用可能な場所には、アリーナ（Z01、点検：2026/09/08）、サブアリーナ（Z16）、北側入口（Z03）などがあります。\n\n体育館全体では、搬入口の車両、非常口前の備品、発電機の点検期限超過（2026/08/28）、消火器の設置位置の4項目について確認・対応が必要です。外壁（通路側）と西側通用口は、外壁の剥がれと扉が完全に閉まらない記録に基づき、利用不可とされています。\n\n個別の利用判定は、体育館全体の開館承認を意味しません。開館の可否は、担当者が現地の状況と記録を確認して判断します。2026/09/12 14:52時点を想定したデモ用の回答です。"
+      id: "q1",
+      q: "開館前に、いま確認・対応することは何ですか",
+      href: "/console/incident",
+      a: "開館前に、次の4項目を確認してください。\n\n1. 予約台帳の利用予定と、北側入口前の人数を確認する（予約台帳は未連携）\n2. 搬入予定を確認し、東側搬入口の車両を移動できるか確認する\n3. 非常口前の備品を、通行を妨げない場所に移動する（2026/09/09の指摘への対応は未完了）\n4. 発電機の点検報告書を確認する。サブアリーナ（Z16）を夜間に利用できるか、電源を含めて確認する\n\nアリーナ単体は記録上、利用可能です。体育館全体は条件の確認が必要です。開館の可否は担当者が判断します。"
     },
     {
-      "id": "q2",
-      "q": "アリーナは利用できますか",
-      "href": "/console/incident",
-      "a": "アリーナ単体は、登録済みの点検記録に基づき利用可能と判定されています。床とゴールの点検記録は2026/09/08のもので、表示中の記録には利用を妨げる指摘はありません。\n\n体育館全体には、開館前に確認・対応が必要な条件が4項目残っています。\n・東側搬入口の車両が通行を妨げている（14:08のカメラ画像）。\n・西側非常口前に備品がある（2026/09/09に高木が「対応が必要」と記録。14:36の画像も同じ場所）。\n・非常用発電機の点検期限（2026/08/28）を過ぎている。\n・消火器が所定の位置から通路側に移動している。\n\n開館前に車両・備品の移動と消火器の設置位置を確認してください。夜間の電源は未確認です。サブアリーナの夜間利用についても、電源を別途確認する必要があります。開館の可否は担当者が判断します。"
+      id: "q2",
+      q: "発電機の記録は、どこまで進んでいますか",
+      href: "/console/facilities?view=upkeep&zone=Z05&equip=K-G3&from=assistant",
+      a: "非常用発電機（K-G3）の記録は、次までです。\n\n・2026/03/18は点検報告書の保管日です。点検の実施日ではありません。保管したのは高木（総務）です。\n・2026/08/28は記録上の期限です。実施の記録はありません。\n・2026/09/12の機械室の写真は、点検票が貼られたままです。票の文字は判読できません。\n\n夜間の電源は未確認です。開館の可否は担当者が判断します。"
     },
     {
-      "id": "q3",
-      "q": "屋上と空調設備が未確認なのはなぜですか",
-      "href": "/console/facilities?view=open",
-      "a": "屋上と空調設備は、利用可否を判断するための点検記録が登録されていません。\n\n台帳への登録だけでは、利用できるか判断できません。点検記録を確認できるまで、利用可否が未確認の項目として表示します。"
+      id: "q3",
+      q: "屋上と空調設備が未確認なのはなぜですか",
+      href: "/console/facilities?view=open&zone=Z12",
+      a: "屋上と空調設備は、利用可否を判断するための点検記録が登録されていません。\n\n台帳への登録だけでは、利用できるか判断できません。点検記録を確認できるまで、利用可否が未確認の項目として表示します。"
     }
   ]
 } as const;
@@ -554,7 +554,7 @@ export const OPENING_DOC = [
   {
     "key": "note",
     "label": "注記",
-    "value": "デモ用の下書きです。画像の確認結果は、開館を承認した記録ではありません。",
+    "value": "下書きです。開館を承認した記録ではありません。",
     "pair": ""
   }
 ] as const;
@@ -706,7 +706,10 @@ export const EQUIPMENT: Equipment[] = [
   { id: "K-W1", zoneId: "Z06", name: "受水槽", record: "connected", next: "—" },
   { id: "K-E3", zoneId: "Z08", name: "外壁（通路側）", record: "unlinked", next: "—" },
   { id: "K-F4", zoneId: "Z04", name: "非常口の通行", record: "connected", next: "—" },
-  { id: "K-D3", zoneId: "Z02", name: "搬入口の通行", record: "checking", next: "—" }
+  { id: "K-D3", zoneId: "Z02", name: "搬入口の通行", record: "checking", next: "—" },
+  { id: "K-F2", zoneId: "Z07", name: "消火器の設置位置", record: "connected", next: "2026/09/30" },
+  { id: "K-D1", zoneId: "Z03", name: "出入口の開閉", record: "connected", next: "—" },
+  { id: "K-D2", zoneId: "Z18", name: "扉の閉鎖・施錠", record: "unlinked", next: "—" }
 ];
 
 export type FacilityEvent = {
@@ -802,11 +805,64 @@ export const EVENTS: FacilityEvent[] = [
     image: "/img/b1.png",
     href: "/console/review",
     ref: "INC-20260912-007"
+  },
+  {
+    id: "f2-move",
+    equipId: "K-F2",
+    date: "—",
+    kind: "不具合",
+    body: "所定の位置から通路側に移動している。発見日は記録にない",
+    by: "翠嶺防災"
+  },
+  {
+    id: "f2-due",
+    equipId: "K-F2",
+    date: "2026/09/30",
+    kind: "期限",
+    body: "記録上の期限",
+    by: "翠嶺防災"
+  },
+  {
+    id: "d1-a",
+    equipId: "K-D1",
+    date: "2026/09/05",
+    kind: "点検",
+    body: "扉の点検。当日は入口前に人がいますが、扉は閉まっています",
+    by: "指定管理者"
+  },
+  {
+    id: "d2-a",
+    equipId: "K-D2",
+    date: "2026/07/22",
+    kind: "不具合",
+    body: "西側通用口の扉が完全に閉まらないことを記録。資料は紙で保管。手入力の記録がある",
+    by: "市の営繕担当"
   }
 ];
 
 export function eventsFor(equipId: string) {
-  return EVENTS.filter((row) => row.equipId === equipId).slice().sort((a, b) => a.date.localeCompare(b.date));
+  return EVENTS.filter((row) => row.equipId === equipId)
+    .slice()
+    .sort((a, b) => {
+      if (a.date === "—" && b.date !== "—") return -1;
+      if (b.date === "—" && a.date !== "—") return 1;
+      return a.date.localeCompare(b.date);
+    });
+}
+
+export function recordEventsForZone(zone: Zone): FacilityEvent[] {
+  if (equipmentForZone(zone.id).length > 0) return [];
+  if (zone.recordDate === "—" || zone.basis === "—") return [];
+  return [
+    {
+      id: `${zone.id}-record`,
+      equipId: zone.id,
+      date: zone.recordDate,
+      kind: "点検",
+      body: zone.basis,
+      by: zone.vendor
+    }
+  ];
 }
 
 export function equipmentForZone(zoneId: string) {

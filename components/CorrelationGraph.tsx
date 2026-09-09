@@ -36,7 +36,7 @@ export function CorrelationGraph() {
 export function CorrelationCaption() {
   return (
     <p className="corrCap">
-      関連付け：{INCIDENT.confidence}%（デモ値）。{INCIDENT.confidenceNote}
+      関連付け：{INCIDENT.confidence}%。{INCIDENT.confidenceNote}
     </p>
   );
 }
