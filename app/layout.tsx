@@ -10,8 +10,8 @@ const sans = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "総合体育館コンソール",
-  description: "翠嶺市総合体育館"
+  title: "総合体育館 施設管理",
+  description: "翠嶺市総合体育館の点検記録と、場所・設備の利用可否を一覧で確認できるデモです。"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

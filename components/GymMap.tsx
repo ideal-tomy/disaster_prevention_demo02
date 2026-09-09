@@ -18,7 +18,7 @@ function labelOf(pin: MapPin) {
 
 export function GymMap({ activePin = null, compact = false }: Props) {
   return (
-    <svg className={compact ? "mapSvg mapSvgCompact" : "mapSvg"} viewBox="0 0 100 100" role="img" aria-label="翠嶺市総合体育館">
+    <svg className={compact ? "mapSvg mapSvgCompact" : "mapSvg"} viewBox="0 0 100 100" role="img" aria-label="翠嶺市総合体育館の場所・設備の配置図">
       <rect x="6" y="20" width="88" height="72" rx="1.5" fill="#f7f8fa" stroke="#e4e8ee" />
       <rect x="24" y="30" width="42" height="38" fill="#eef1f4" stroke="#e4e8ee" />
       <rect x="66" y="32" width="18" height="24" fill="#f4f6f8" stroke="#e4e8ee" />

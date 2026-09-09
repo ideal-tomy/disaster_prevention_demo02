@@ -24,12 +24,12 @@ export function ReviewProvider({ children }: { children: React.ReactNode }) {
     setDecisions((prev) => ({ ...prev, [id]: value }));
     const item = REVIEW_ITEMS.find((row) => row.id === id);
     const verb = value === "needed" ? "対応が必要" : "問題なし";
-    setToast(`${item?.place ?? ""}を${verb}にしました`);
+    setToast(`${item?.place ?? "対象"}の${item?.spot ?? "画像"}について、「${verb}」と記録しました`);
     window.setTimeout(() => setToast(""), 2000);
   };
 
   const pendingCount = Object.values(decisions).filter((v) => v === "pending").length;
-  const confirmer = decisions.van && decisions.van !== "pending" ? "岡田（現場）" : "未確定";
+  const confirmer = decisions.van && decisions.van !== "pending" ? "岡田（指定管理者）" : "未確認";
 
   const order = useMemo(() => {
     const byId = Object.fromEntries(REVIEW_ITEMS.map((item) => [item.id, item]));

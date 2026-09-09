@@ -7,24 +7,25 @@ export default function DashboardPage() {
   return (
     <section>
       <div className="pageHead">
-        <h2>統合ダッシュボード</h2>
+        <h2>施設の状況</h2>
+        <p>場所・設備18件の利用判定（記録に基づく）</p>
       </div>
       <div className="statGrid">
         <article className="card">
-          <label>使える</label>
-          <div className="figure">{DASHBOARD.usable}</div>
+          <label>利用可能</label>
+          <div className="figure">{DASHBOARD.usable}<small>件</small></div>
         </article>
         <article className="card">
-          <label>条件付き</label>
-          <div className="figure">{DASHBOARD.conditional}</div>
+          <label>条件の確認が必要</label>
+          <div className="figure">{DASHBOARD.conditional}<small>件</small></div>
         </article>
         <article className="card">
-          <label>使えない</label>
-          <div className="figure">{DASHBOARD.unusable}</div>
+          <label>利用不可</label>
+          <div className="figure">{DASHBOARD.unusable}<small>件</small></div>
         </article>
         <article className="card">
-          <label>確認できていない</label>
-          <div className="figure">{DASHBOARD.unknown}</div>
+          <label>利用可否が未確認</label>
+          <div className="figure">{DASHBOARD.unknown}<small>件</small></div>
         </article>
       </div>
 
@@ -34,13 +35,13 @@ export default function DashboardPage() {
           <div className="kicker">
             <span className="num">{INCIDENT.id}</span>
             <StatusPill kind={INCIDENT.judgment} />
-            <span className="pill pillAi">{INCIDENT.confidence}%</span>
+            <span className="pill pillAi">関連付け {INCIDENT.confidence}%（デモ値）</span>
           </div>
           <h3>{INCIDENT.headline}</h3>
-          <p className="meta">14:08 車両 · 14:36 備品 · 発電機 2026/08/28</p>
+          <p className="meta">車両の撮影 14:08 · 備品の撮影 14:36 · 発電機の点検期限 2026/08/28</p>
         </div>
         <Link href="/console/incident" className="btn btnGhost">
-          詳細
+          要対応事項を見る
         </Link>
       </article>
 
@@ -49,25 +50,25 @@ export default function DashboardPage() {
         <div className="mapLegend">
           <span>
             <i className="legDot" style={{ background: "#1f7a4d" }} />
-            使える
+            利用可能
           </span>
           <span>
             <i className="legDot" style={{ background: "#c47b12" }} />
-            条件付き
+            条件の確認が必要
           </span>
           <span>
             <i className="legDot" style={{ background: "#b42318" }} />
-            使えない
+            利用不可
           </span>
           <span>
             <i className="legDot legDash" />
-            確認できていない
+            利用可否が未確認
           </span>
         </div>
         <div className="mapLink">
-          <span className="num">{DASHBOARD.integrations}</span>
+          <span className="num">資料取り込み {DASHBOARD.integrations} 項目</span>
           <Link href="/console/integrations" className="btn btnGhost">
-            連携
+            連携状況を見る
           </Link>
         </div>
       </article>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { DOC_MAP, LEDGER_DOC, OPENING_DOC } from "@/data/suirei";
 import { useReview } from "@/components/ReviewState";
 
@@ -11,12 +12,12 @@ export function DocumentsView() {
   return (
     <section>
       <div className="pageHead">
-        <h2>書類</h2>
+        <h2>点検・開館前の記録</h2>
       </div>
       <div className="docGrid">
         <article className="card docSheet paper">
-          <h3>開館前チェック</h3>
-          {OPENING_DOC.filter((row) => row.key !== "note" && row.key !== "title").map((row) => (
+          <h3>開館前確認票（下書き）</h3>
+          {OPENING_DOC.filter((row) => row.key !== "title").map((row) => (
             <div
               className={row.pair && pair === row.pair ? "docRow lit" : "docRow"}
               key={row.key}
@@ -24,12 +25,35 @@ export function DocumentsView() {
               onMouseLeave={() => setPair("")}
             >
               <span>{row.label}</span>
-              <div>{row.key === "who" ? confirmer : row.value}</div>
+              <div>
+                {row.key === "who" ? confirmer : row.value}
+                {row.key === "g1" ? (
+                  <p>
+                    <Link className="linkish" href="/console/facilities?view=upkeep&zone=Z05&equip=K-G3&from=documents">
+                      記録
+                    </Link>
+                  </p>
+                ) : null}
+                {row.key === "g2" ? (
+                  <p>
+                    <Link className="linkish" href="/console/facilities?view=upkeep&zone=Z04&equip=K-F4&from=documents">
+                      記録
+                    </Link>
+                  </p>
+                ) : null}
+                {row.key === "g3" ? (
+                  <p>
+                    <Link className="linkish" href="/console/facilities?view=upkeep&zone=Z02&equip=K-D3&from=documents">
+                      記録
+                    </Link>
+                  </p>
+                ) : null}
+              </div>
             </div>
           ))}
         </article>
         <article className="card docSheet paper">
-          <h3>設備点検記録簿</h3>
+          <h3>設備点検記録簿（抜粋）</h3>
           {LEDGER_DOC.filter((row) => row.key !== "title").map((row) => (
             <div
               className={row.pair && pair === row.pair ? "docRow lit" : "docRow"}
@@ -46,8 +70,8 @@ export function DocumentsView() {
       <table className="mapTable">
         <thead>
           <tr>
-            <th>点検記録簿</th>
-            <th>開館前チェック</th>
+            <th>参照元の記録・画像</th>
+            <th>開館前の確認・対応事項</th>
           </tr>
         </thead>
         <tbody>

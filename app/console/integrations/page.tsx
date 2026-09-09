@@ -5,10 +5,11 @@ export default function IntegrationsPage() {
   return (
     <section>
       <div className="pageHead">
-        <h2>システム連携</h2>
+        <h2>データ連携状況</h2>
       </div>
       <article className="card" style={{ marginTop: 20 }}>
-        <div className="figure">5 / 8</div>
+        <div className="figure">取り込み済み 5 / 8 項目</div>
+        <p className="hint">内容を確認中：2項目／未連携：1項目。設備の利用判定とは別の状態です。</p>
         <div className="barTrack" style={{ marginTop: 16 }}>
           <div className="barFill" />
         </div>

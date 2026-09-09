@@ -750,6 +750,45 @@ table.fac tbody tr.current {
   font-size: 12px;
 }
 
+.bldgLine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 16px 0 0;
+  font-size: 13px;
+}
+.bldgLine div { display: flex; gap: 8px; }
+.bldgLine dt { color: var(--muted); }
+.bldgLine dd { margin: 0; }
+
+.eqName { margin: 16px 0 8px; font-size: 14px; font-weight: 500; }
+.eqEmpty { color: var(--muted); font-size: 13px; }
+.eqLine { list-style: none; margin: 0; padding: 0; }
+.eqItem {
+  display: grid;
+  grid-template-columns: 92px 64px 1fr;
+  gap: 8px;
+  padding: 0 0 12px 12px;
+  border-left: 1px solid var(--line);
+  position: relative;
+}
+.eqItem::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--ink);
+}
+.eqDotted { border-left-style: dashed; border-left-color: var(--unknown); }
+.eqDate { font-size: 12px; }
+.eqKind { font-size: 12px; color: var(--muted); }
+.eqItem p { margin: 0; font-size: 13px; }
+.eqMeta { color: var(--muted); font-size: 12px; margin-top: 4px; }
+.eqThumb { width: 72px; height: 40px; object-fit: cover; border-radius: 2px; margin-top: 6px; display: block; }
+
 .toast {
   margin: 12px 0 0;
   padding: 8px 12px;
@@ -774,6 +813,13 @@ table.fac tbody tr.current {
 .mapTable tr.lit td {
   background: var(--nav);
 }
+
+/* Longer, explicit Japanese labels should wrap within their content area. */
+.main { min-width: 0; }
+.card .figure small { margin-left: 4px; font-size: 14px; font-weight: 400; }
+.intRow { grid-template-columns: 180px 124px minmax(0, 1fr) 12px; }
+.docRow { grid-template-columns: 132px minmax(0, 1fr); }
+.docRow > div, .corrCap { overflow-wrap: anywhere; }
 
 @media (prefers-reduced-motion: reduce) {
   .fadeCell, .btn, .seg button { transition: none; }

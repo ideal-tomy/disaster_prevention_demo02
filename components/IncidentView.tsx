@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { CorrelationCaption, CorrelationGraph } from "@/components/CorrelationGraph";
 import { GymMap } from "@/components/GymMap";
 import { StatusPill } from "@/components/StatusPill";
@@ -13,7 +14,7 @@ export function IncidentView() {
   return (
     <section>
       <div className="pageHead">
-        <h2>インシデント</h2>
+        <h2>要対応事項</h2>
       </div>
       <div className="incidentGrid">
         <div className="timeline">
@@ -42,6 +43,13 @@ export function IncidentView() {
                   <button type="button" className="tlBtn" onClick={() => setActivePin(row.pinId)}>
                     {row.text}
                   </button>
+                  {row.id === "gen" ? (
+                    <p>
+                      <Link className="linkish" href="/console/facilities?view=upkeep&zone=Z05&equip=K-G3&from=incident">
+                        K-G3
+                      </Link>
+                    </p>
+                  ) : null}
                 </li>
               ))}
             </ul>
@@ -57,13 +65,14 @@ export function IncidentView() {
           </article>
           <article className="card">
             <p className="conclusion">{INCIDENT.conclusion}</p>
+            <h3>確認・対応すること</h3>
             <ol className="actions">
               {INCIDENT.actions.map((action) => (
                 <li key={action}>{action}</li>
               ))}
             </ol>
             <p>
-              <StatusPill kind={INCIDENT.judgment} />
+              体育館全体：<StatusPill kind={INCIDENT.judgment} />
             </p>
           </article>
         </div>

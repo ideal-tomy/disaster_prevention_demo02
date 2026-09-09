@@ -30,13 +30,13 @@ export function StillFrame({ src, fileName, ratio = "wide", cameraId, caption, n
         {!failed ? (
           <img
             src={src}
-            alt=""
+            alt={caption ?? label ?? "確認対象の画像"}
             ref={bindImage}
             onLoad={() => setLoaded(true)}
             onError={() => setFailed(true)}
           />
         ) : null}
-        {!loaded || failed ? <div className="stillEmpty">{fileName}</div> : null}
+        {!loaded || failed ? <div className="stillEmpty" role="status">{failed ? "画像を表示できません" : "画像を読み込んでいます"}</div> : null}
         {loaded && !failed && box && label ? (
           <div
             className="detBox"

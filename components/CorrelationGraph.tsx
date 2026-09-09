@@ -11,7 +11,7 @@ export function CorrelationGraph() {
       <line x1="120" y1="75" x2="192" y2="122" stroke="#e4e8ee" strokeWidth="1.2" />
       <rect x="78" y="62" width="84" height="26" rx="4" fill="#f3f1fb" />
       <text x="120" y="79" textAnchor="middle" fontSize="11" fill="#5b4db7">
-        総合
+        総合体育館
       </text>
       <rect x="8" y="14" width="80" height="22" rx="4" fill="#fff" stroke="#e4e8ee" />
       <text x="48" y="29" textAnchor="middle" fontSize="10" fill="#1c2430">
@@ -36,7 +36,7 @@ export function CorrelationGraph() {
 export function CorrelationCaption() {
   return (
     <p className="corrCap">
-      {INCIDENT.confidence}%　{INCIDENT.confidenceNote}
+      関連付け：{INCIDENT.confidence}%（デモ値）。{INCIDENT.confidenceNote}
     </p>
   );
 }

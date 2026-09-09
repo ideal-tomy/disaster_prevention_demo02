@@ -12,9 +12,9 @@ export function StatusPill({ kind }: { kind: Kind }) {
     thisMonth: { text: dueLabel("thisMonth"), cls: "pill pillWarn" },
     recorded: { text: dueLabel("recorded"), cls: "pill pillOk" },
     none: { text: dueLabel("none"), cls: "pill pillUnknown" },
-    connected: { text: "接続済み", cls: "pill pillOk" },
-    checking: { text: "確認中", cls: "pill pillWarn" },
-    unlinked: { text: "未確認", cls: "pill pillUnknown" }
+    connected: { text: "取り込み済み", cls: "pill pillOk" },
+    checking: { text: "内容を確認中", cls: "pill pillWarn" },
+    unlinked: { text: "未連携", cls: "pill pillUnknown" }
   };
   const item = map[kind];
   return <span className={item.cls}>{item.text}</span>;
