@@ -1,10 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DEMO_CLOCK, DEMO_DATE } from "@/data/suirei";
 import { useReview } from "@/components/ReviewState";
+
+const PhoneNavLockContext = createContext<(locked: boolean) => void>(() => {});
+
+export function usePhoneNavLock(locked: boolean) {
+  const setLocked = useContext(PhoneNavLockContext);
+  useEffect(() => {
+    setLocked(locked);
+    return () => setLocked(false);
+  }, [locked, setLocked]);
+}
 
 const NAV = [
   { href: "/console", label: "施設の状況" },
@@ -36,7 +46,12 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const { pendingCount } = useReview();
   const [more, setMore] = useState(false);
+  const [phoneLocked, setPhoneLocked] = useState(false);
   const moreCurrent = path.startsWith("/console/assistant") || MORE.some((item) => isCurrent(item.href, path));
+  const lockPhoneNav = useCallback((locked: boolean) => {
+    setPhoneLocked(locked);
+    if (locked) setMore(false);
+  }, []);
 
   useEffect(() => {
     setMore(false);
@@ -46,6 +61,7 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
     badge === "incident" ? 1 : badge === "review" ? pendingCount : 0;
 
   return (
+    <PhoneNavLockContext.Provider value={lockPhoneNav}>
     <div className="shell appMin">
       <header className="topbar">
         <div className="topLeft">
@@ -89,18 +105,18 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
         </nav>
         <main className="main">{children}</main>
       </div>
-      <nav className="phoneBar" aria-label="主な画面">
+      <nav className="phoneBar" aria-label="主な画面" aria-hidden={phoneLocked || undefined} inert={phoneLocked || undefined}>
         {TABS.map((item) => {
           const current = isCurrent(item.href, path);
           const count = countOf(item.badge);
           return (
-            <Link key={item.href} href={item.href} aria-current={current ? "page" : undefined}>
+            <Link key={item.href} href={item.href} aria-current={current ? "page" : undefined} tabIndex={phoneLocked ? -1 : undefined}>
               <span>{item.label}</span>
               {count > 0 ? <span className="badge">{count}</span> : null}
             </Link>
           );
         })}
-        <button type="button" aria-expanded={more} aria-current={moreCurrent ? "page" : undefined} onClick={() => setMore(true)}>
+        <button type="button" aria-expanded={more} aria-current={moreCurrent ? "page" : undefined} tabIndex={phoneLocked ? -1 : undefined} onClick={() => setMore(true)}>
           その他
         </button>
       </nav>
@@ -124,5 +140,6 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
         </>
       ) : null}
     </div>
+    </PhoneNavLockContext.Provider>
   );
 }

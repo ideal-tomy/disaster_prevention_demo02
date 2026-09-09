@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { StatusPill } from "@/components/StatusPill";
 import { EquipmentTimeline } from "@/components/EquipmentTimeline";
+import { usePhoneNavLock } from "@/components/ConsoleShell";
 import { useReview } from "@/components/ReviewState";
 import {
   EMPTY_ZONE_NOTE,
@@ -66,6 +67,7 @@ export function FacilitiesView({
   const router = useRouter();
   const { decisions } = useReview();
   const [open, setOpen] = useState<Zone | null>(null);
+  usePhoneNavLock(open != null);
 
   useEffect(() => {
     if (!zoneId) {
@@ -86,17 +88,27 @@ export function FacilitiesView({
   }, [zoneId, equipId]);
 
   const close = useCallback(() => {
+    const id = open?.id;
     setOpen(null);
-    router.push(facilitiesHref(view));
-  }, [router, view]);
+    router.push(facilitiesHref(view), { scroll: false });
+    if (!id) return;
+    const scrollToRow = () => {
+      document.querySelector(`[data-zone="${id}"]`)?.scrollIntoView({ block: "center" });
+    };
+    requestAnimationFrame(() => {
+      scrollToRow();
+      window.setTimeout(scrollToRow, 50);
+    });
+  }, [open, router, view]);
 
   useEffect(() => {
+    if (!open) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") close();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [close]);
+  }, [open, close]);
 
   const go = (next: View) => {
     router.push(facilitiesHref(next, open?.id ?? zoneId, equipId, from));
@@ -182,6 +194,7 @@ export function FacilitiesView({
                   </tr>
                 ) : null}
                 <tr
+                  data-zone={zone.id}
                   className={open?.id === zone.id ? "current" : undefined}
                   onClick={() => {
                     if (zone.click === "incident") router.push("/console/incident");
