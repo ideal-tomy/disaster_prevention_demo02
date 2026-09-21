@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DEMO_CLOCK, DEMO_DATE } from "@/data/suirei";
 import { useReview } from "@/components/ReviewState";
+import { useSelectionReturn } from "@/hooks/useSelectionReturn";
 
 const PhoneNavLockContext = createContext<(locked: boolean) => void>(() => {});
 
@@ -45,6 +46,7 @@ function isCurrent(href: string, path: string) {
 export function ConsoleShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const { pendingCount } = useReview();
+  const { returnUrl } = useSelectionReturn();
   const [more, setMore] = useState(false);
   const [phoneLocked, setPhoneLocked] = useState(false);
   const moreCurrent = path.startsWith("/console/assistant") || MORE.some((item) => isCurrent(item.href, path));
@@ -65,6 +67,11 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
     <div className="shell appMin">
       <header className="topbar">
         <div className="topLeft">
+          {returnUrl ? (
+            <a href={returnUrl} className="returnLink">
+              ← 紹介へ
+            </a>
+          ) : null}
           <span className="brandMark" aria-hidden>
             嶺
           </span>
@@ -74,7 +81,7 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <div className="topRight">
-          <span className="dateLine deskOnly">デモの基準日時</span>
+          <span className="dateLine deskOnly">基準日時（固定）</span>
           <span className="clock">{DEMO_CLOCK}</span>
           <span className="dateLine deskOnly">{DEMO_DATE}</span>
           <span className="dateLine deskOnly">台風第14号接近</span>

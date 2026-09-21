@@ -204,6 +204,14 @@ button { cursor: pointer; }
 .topLeft { display: flex; align-items: center; gap: 12px; }
 .topLeft h1 { margin: 0; font-size: 16px; font-weight: 500; }
 .topLeft p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+.returnLink {
+  flex: none;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.returnLink:hover { color: var(--ink); }
 
 .topRight { display: flex; align-items: center; gap: 10px; }
 

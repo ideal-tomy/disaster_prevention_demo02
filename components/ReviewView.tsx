@@ -12,7 +12,7 @@ function statusText(decision: ReviewDecision, decidedNote?: string) {
 }
 
 export function ReviewView() {
-  const { decisions, setDecision, order, pendingCount, toast } = useReview();
+  const { decisions, setDecision, resetDecision, order, pendingCount, toast } = useReview();
   const needed = Object.values(decisions).filter((v) => v === "needed").length;
   const ok = Object.values(decisions).filter((v) => v === "ok").length;
 
@@ -69,7 +69,13 @@ export function ReviewView() {
                       問題なし
                     </button>
                   </div>
-                ) : null}
+                ) : (
+                  <div className="btnRow">
+                    <button type="button" className="btn btnGhost" onClick={() => resetDecision(item.id)}>
+                      判断をやり直す
+                    </button>
+                  </div>
+                )}
               </div>
             </article>
           );

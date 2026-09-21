@@ -6,6 +6,7 @@ import { REVIEW_ITEMS, type ReviewDecision } from "@/data/suirei";
 type Ctx = {
   decisions: Record<string, ReviewDecision>;
   setDecision: (id: string, value: Exclude<ReviewDecision, "pending">) => void;
+  resetDecision: (id: string) => void;
   pendingCount: number;
   confirmer: string;
   toast: string;
@@ -28,6 +29,13 @@ export function ReviewProvider({ children }: { children: React.ReactNode }) {
     window.setTimeout(() => setToast(""), 2000);
   };
 
+  const resetDecision = (id: string) => {
+    setDecisions((prev) => ({ ...prev, [id]: "pending" }));
+    const item = REVIEW_ITEMS.find((row) => row.id === id);
+    setToast(`${item?.place ?? "対象"}の${item?.spot ?? "画像"}の判断を取り消しました`);
+    window.setTimeout(() => setToast(""), 2000);
+  };
+
   const pendingCount = Object.values(decisions).filter((v) => v === "pending").length;
   const confirmer = decisions.van && decisions.van !== "pending" ? "岡田（指定管理者）" : "未確認";
 
@@ -38,7 +46,7 @@ export function ReviewProvider({ children }: { children: React.ReactNode }) {
   }, [decisions.van]);
 
   return (
-    <ReviewContext.Provider value={{ decisions, setDecision, pendingCount, confirmer, toast, order }}>
+    <ReviewContext.Provider value={{ decisions, setDecision, resetDecision, pendingCount, confirmer, toast, order }}>
       {children}
     </ReviewContext.Provider>
   );
