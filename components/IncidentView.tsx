@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useAssistant } from "@/components/AssistantState";
 import { CorrelationCaption, CorrelationGraph } from "@/components/CorrelationGraph";
 import { GymMap } from "@/components/GymMap";
 import { StatusPill } from "@/components/StatusPill";
@@ -9,8 +10,9 @@ import { StillFrame } from "@/components/StillFrame";
 import { INCIDENT } from "@/data/suirei";
 
 export function IncidentView({ from }: { from?: string }) {
+  const { open: openAssistant } = useAssistant();
   const [activePin, setActivePin] = useState<string | null>(null);
-  const back = from === "assistant" ? { href: "/console/assistant", label: "AIアシスタント" } : null;
+  const back = from === "assistant" ? { label: "AIアシスタント" } : null;
 
   return (
     <section>
@@ -91,9 +93,9 @@ export function IncidentView({ from }: { from?: string }) {
             </p>
             {back ? (
               <p>
-                <Link className="linkish" href={back.href}>
+                <button type="button" className="linkish" onClick={() => openAssistant({ showQ1: true })}>
                   {back.label}
-                </Link>
+                </button>
               </p>
             ) : null}
           </article>

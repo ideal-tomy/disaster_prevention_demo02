@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { QA } from "@/data/suirei";
+import { useAssistant } from "@/components/AssistantState";
 
 type Msg = { role: "user" | "ai"; text: string; href?: string };
 
-export function AssistantView({ showQ1 }: { showQ1: boolean }) {
+export function AssistantChat({ showQ1 }: { showQ1: boolean }) {
+  const { close } = useAssistant();
   const initial = useMemo<Msg[]>(() => {
     if (!showQ1) return [];
     return [
@@ -24,23 +26,25 @@ export function AssistantView({ showQ1 }: { showQ1: boolean }) {
   };
 
   return (
-    <section>
-      <div className="pageHead">
-        <h2>AIアシスタント</h2>
-      </div>
-      <div className="chat">
+    <div className="assistantBody">
+      <div className="assistantChat">
+        {messages.length === 0 ? (
+          <p className="assistantEmpty">施設の記録について質問できます。下の例から選ぶか、自由入力してください。</p>
+        ) : null}
         {messages.map((msg, index) => (
           <div key={`${msg.role}-${index}`} className={msg.role === "user" ? "bubble bubbleUser" : "bubble"}>
             {msg.text}
             {msg.role === "ai" && msg.href ? (
               <p>
-                <Link className="linkish" href={msg.href}>
+                <Link className="linkish" href={msg.href} onClick={close}>
                   関連する記録を見る
                 </Link>
               </p>
             ) : null}
           </div>
         ))}
+      </div>
+      <div className="assistantFoot">
         <div className="chips">
           {QA.chips.map((chip) => (
             <button key={chip.id} type="button" className="chip" onClick={() => ask(chip.q)}>
@@ -69,6 +73,6 @@ export function AssistantView({ showQ1 }: { showQ1: boolean }) {
           </button>
         </form>
       </div>
-    </section>
+    </div>
   );
 }

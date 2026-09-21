@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { StatusPill } from "@/components/StatusPill";
 import { EquipmentTimeline } from "@/components/EquipmentTimeline";
+import { useAssistant } from "@/components/AssistantState";
 import { usePhoneNavLock } from "@/components/ConsoleShell";
 import { useReview } from "@/components/ReviewState";
 import {
@@ -114,6 +115,7 @@ export function FacilitiesView({
     router.push(facilitiesHref(next, open?.id ?? zoneId, equipId, from));
   };
 
+  const { open: openAssistant } = useAssistant();
   const back =
     from === "incident"
       ? { href: "/console/incident", label: "要対応事項" }
@@ -122,7 +124,7 @@ export function FacilitiesView({
         : from === "documents"
           ? { href: "/console/documents", label: "点検・開館前の記録" }
           : from === "assistant"
-            ? { href: "/console/assistant", label: "AIアシスタント" }
+            ? { label: "AIアシスタント", action: "assistant" as const }
             : null;
 
   return (
@@ -280,9 +282,15 @@ export function FacilitiesView({
             ) : null}
             {back ? (
               <p>
-                <Link className="linkish" href={back.href}>
-                  {back.label}
-                </Link>
+                {"action" in back && back.action === "assistant" ? (
+                  <button type="button" className="linkish" onClick={() => openAssistant({ showQ1: true })}>
+                    {back.label}
+                  </button>
+                ) : (
+                  <Link className="linkish" href={back.href!}>
+                    {back.label}
+                  </Link>
+                )}
               </p>
             ) : null}
           </aside>

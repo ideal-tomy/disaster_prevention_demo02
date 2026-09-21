@@ -1,4 +1,4 @@
-import { AssistantView } from "@/components/AssistantView";
+import { redirect } from "next/navigation";
 
 export default async function AssistantPage({
   searchParams
@@ -6,5 +6,5 @@ export default async function AssistantPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   const params = await searchParams;
-  return <AssistantView showQ1={params.q !== "0"} />;
+  redirect(params.q === "0" ? "/console?ai=1&q=0" : "/console?ai=1");
 }

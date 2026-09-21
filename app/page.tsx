@@ -19,7 +19,7 @@ export default function HomePage() {
           <Link className="btn btnPrimary" href="/console">
             管理画面を開く
           </Link>
-          <Link className="btn btnGhost" href="/console/assistant">
+          <Link className="btn btnGhost" href="/console?ai=1">
             AIに質問する
           </Link>
         </div>

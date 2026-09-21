@@ -2,8 +2,10 @@
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { DEMO_CLOCK, DEMO_DATE } from "@/data/suirei";
+import { AssistantPanel } from "@/components/AssistantPanel";
+import { useAssistant } from "@/components/AssistantState";
 import { useReview } from "@/components/ReviewState";
 import { useSelectionReturn } from "@/hooks/useSelectionReturn";
 
@@ -24,7 +26,7 @@ const NAV = [
   { href: "/console/review", label: "画像確認", badge: "review" as const },
   { href: "/console/documents", label: "点検・開館前の記録" },
   { href: "/console/integrations", label: "データ連携状況" },
-  { href: "/console/assistant", label: "AIアシスタント" }
+  { action: "assistant" as const, label: "AIアシスタント" }
 ];
 
 const TABS = [
@@ -45,11 +47,14 @@ function isCurrent(href: string, path: string) {
 
 export function ConsoleShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
+  const searchParams = useSearchParams();
   const { pendingCount } = useReview();
   const { returnUrl } = useSelectionReturn();
+  const { isOpen: assistantOpen, open: openAssistant } = useAssistant();
   const [more, setMore] = useState(false);
   const [phoneLocked, setPhoneLocked] = useState(false);
-  const moreCurrent = path.startsWith("/console/assistant") || MORE.some((item) => isCurrent(item.href, path));
+  const overlayLocked = phoneLocked || assistantOpen;
+  const moreCurrent = MORE.some((item) => isCurrent(item.href, path));
   const lockPhoneNav = useCallback((locked: boolean) => {
     setPhoneLocked(locked);
     if (locked) setMore(false);
@@ -59,8 +64,23 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
     setMore(false);
   }, [path]);
 
+  useEffect(() => {
+    if (searchParams.get("ai") !== "1") return;
+    openAssistant({ showQ1: searchParams.get("q") !== "0" });
+    const url = new URL(window.location.href);
+    url.searchParams.delete("ai");
+    url.searchParams.delete("q");
+    const next = `${url.pathname}${url.search}${url.hash}`;
+    window.history.replaceState({}, "", next);
+  }, [searchParams, openAssistant]);
+
   const countOf = (badge?: "incident" | "review") =>
     badge === "incident" ? 1 : badge === "review" ? pendingCount : 0;
+
+  const openAssistantPanel = () => {
+    setMore(false);
+    openAssistant({ showQ1: true });
+  };
 
   return (
     <PhoneNavLockContext.Provider value={lockPhoneNav}>
@@ -92,18 +112,31 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
           >
             注意
           </Link>
-          <Link href="/console/assistant" className="btn btnPrimary deskOnly">
+          <button type="button" className="btn btnPrimary deskOnly" onClick={openAssistantPanel}>
             AIに質問
-          </Link>
+          </button>
         </div>
       </header>
       <div className="bodyRow">
         <nav className="nav" aria-label="メインメニュー">
           {NAV.map((item) => {
-            const current = isCurrent(item.href, path);
+            if ("action" in item && item.action === "assistant") {
+              return (
+                <button
+                  key="assistant"
+                  type="button"
+                  className="navAction"
+                  aria-current={assistantOpen ? "page" : undefined}
+                  onClick={openAssistantPanel}
+                >
+                  {item.label}
+                </button>
+              );
+            }
+            const current = isCurrent(item.href!, path);
             const count = countOf(item.badge);
             return (
-              <Link key={item.href} href={item.href} aria-current={current ? "page" : undefined}>
+              <Link key={item.href} href={item.href!} aria-current={current ? "page" : undefined}>
                 {item.label}
                 {count > 0 ? <span className="badge">{count}</span> : null}
               </Link>
@@ -112,18 +145,18 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
         </nav>
         <main className="main">{children}</main>
       </div>
-      <nav className="phoneBar" aria-label="主な画面" aria-hidden={phoneLocked || undefined} inert={phoneLocked || undefined}>
+      <nav className="phoneBar" aria-label="主な画面" aria-hidden={overlayLocked || undefined} inert={overlayLocked || undefined}>
         {TABS.map((item) => {
           const current = isCurrent(item.href, path);
           const count = countOf(item.badge);
           return (
-            <Link key={item.href} href={item.href} aria-current={current ? "page" : undefined} tabIndex={phoneLocked ? -1 : undefined}>
+            <Link key={item.href} href={item.href} aria-current={current ? "page" : undefined} tabIndex={overlayLocked ? -1 : undefined}>
               <span>{item.label}</span>
               {count > 0 ? <span className="badge">{count}</span> : null}
             </Link>
           );
         })}
-        <button type="button" aria-expanded={more} aria-current={moreCurrent ? "page" : undefined} tabIndex={phoneLocked ? -1 : undefined} onClick={() => setMore(true)}>
+        <button type="button" aria-expanded={more} aria-current={moreCurrent ? "page" : undefined} tabIndex={overlayLocked ? -1 : undefined} onClick={() => setMore(true)}>
           その他
         </button>
       </nav>
@@ -131,13 +164,9 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
         <>
           <button type="button" className="moreBackdrop" aria-label="閉じる" onClick={() => setMore(false)} />
           <section className="moreSheet" role="dialog" aria-label="その他">
-            <Link
-              href="/console/assistant"
-              className="btn btnPrimary moreLead"
-              aria-current={path.startsWith("/console/assistant") ? "page" : undefined}
-            >
+            <button type="button" className="btn btnPrimary moreLead" onClick={openAssistantPanel}>
               AIに質問
-            </Link>
+            </button>
             {MORE.map((item) => (
               <Link key={item.href} href={item.href} aria-current={isCurrent(item.href, path) ? "page" : undefined}>
                 {item.label}
@@ -146,6 +175,7 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
           </section>
         </>
       ) : null}
+      <AssistantPanel />
     </div>
     </PhoneNavLockContext.Provider>
   );
