@@ -1,6 +1,20 @@
 import Link from "next/link";
+import { DemoIntro } from "@/components/demo-intro/DemoIntro";
 
-export default function HomePage() {
+type Props = {
+  searchParams: Promise<{ embed?: string }>;
+};
+
+export default async function HomePage({ searchParams }: Props) {
+  const { embed } = await searchParams;
+  if (embed === "intro") {
+    return (
+      <main className="ki-embed-intro">
+        <DemoIntro />
+      </main>
+    );
+  }
+
   return (
     <div className="lp lpBand appMin">
       <header className="lpBar">
