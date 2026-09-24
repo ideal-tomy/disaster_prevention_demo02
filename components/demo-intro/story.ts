@@ -4,6 +4,7 @@ export type DeviceId = "dash" | "karte" | "review";
 export const scenes: {
   title: string;
   caption: string;
+  motion: string;
   duration: number;
   camera: Camera;
   stars: readonly DeviceId[];
@@ -11,6 +12,7 @@ export const scenes: {
   {
     title: "状況を見る",
     caption: "今日の利用可否と、要対応が並びます。",
+    motion: "状況を見る",
     duration: 5500,
     camera: [264, 175, 1.02],
     stars: ["dash"],
@@ -18,6 +20,7 @@ export const scenes: {
   {
     title: "一覧へ",
     caption: "場所と設備の一覧へ進みます。",
+    motion: "一覧へ",
     duration: 4500,
     camera: [516, 175, 0.9],
     stars: ["dash", "karte"],
@@ -25,6 +28,7 @@ export const scenes: {
   {
     title: "記録の線",
     caption: "発電機の記録の線を開きます。",
+    motion: "記録の線を開く",
     duration: 6000,
     camera: [768, 175, 1.0],
     stars: ["karte"],
@@ -32,6 +36,7 @@ export const scenes: {
   {
     title: "画像確認へ",
     caption: "画像で、対応の要否を残します。",
+    motion: "画像確認へ",
     duration: 4500,
     camera: [1020, 175, 0.9],
     stars: ["karte", "review"],
@@ -39,6 +44,7 @@ export const scenes: {
   {
     title: "判定待ち",
     caption: "判定待ちの写真が並びます。",
+    motion: "判定待ち",
     duration: 5500,
     camera: [1272, 175, 1.0],
     stars: ["review"],
@@ -46,6 +52,7 @@ export const scenes: {
   {
     title: "人が残す",
     caption: "対応が必要、と記録します。送信はしません。",
+    motion: "人が残す",
     duration: 5500,
     camera: [1272, 175, 0.98],
     stars: ["review"],
